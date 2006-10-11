@@ -6,9 +6,7 @@
 #include "FWCore/Framework/interface/DataProxyTemplate.h"
 #include "CondCore/DBCommon/interface/DBSession.h"
 #include "CondCore/DBCommon/interface/Exception.h"
-#include "DataSvc/Ref.h"
-#include "DataSvc/RefException.h"
-#include "DataSvc/IDataSvc.h"
+#include "CondCore/DBCommon/interface/Ref.h"
 
 namespace cond{
   template< class RecordT, class DataT >
@@ -37,12 +35,17 @@ namespace cond{
     virtual const DataT* make(const RecordT&, const edm::eventsetup::DataKey&) {
       try{
 	m_session->startReadOnlyTransaction();
-	m_data=pool::Ref<DataT>(&(m_session->DataSvc()),m_pProxyToToken->second);
+	m_data=cond::Ref<DataT>(*m_sessio,m_pProxyToToken->second);
 	*m_data;
 	m_session->commit();
       }catch( const cond::Exception& er ){
 	throw er;
-      }catch( const pool::RefException& er ){
+      }catch( const std::exception& er ){
+        throw cond::Exception( er.what() );
+      }catch( ... ){
+	throw cond::Exception( "Unknown error" );
+      }
+      /*catch( const pool::RefException& er ){
 	//std::cerr<<"caught RefException "<<er.what()<<std::endl;
 	throw cond::Exception( er.what() );
       }catch( const pool::Exception& er ){
@@ -53,8 +56,8 @@ namespace cond{
         throw cond::Exception( er.what() );
       }catch( ... ){
 	throw cond::Exception( "Funny error" );
-      }
-      return &(*m_data);
+	}*/
+      return m_data->ptr();
     }
     virtual void invalidateCache() {
       m_data.clear();
@@ -67,7 +70,7 @@ namespace cond{
     //pool::IDataSvc* m_svc;
     cond::DBSession* m_session;
     std::map<std::string,std::string>::iterator m_pProxyToToken;
-    pool::Ref<DataT> m_data;
+    cond::Ref<DataT> m_data;
   };
 }
 

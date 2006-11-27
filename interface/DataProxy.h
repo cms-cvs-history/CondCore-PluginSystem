@@ -18,7 +18,7 @@ namespace cond{
       edm::eventsetup::DataKey::makeTypeTag<DataT>(); 
     }
     */
-    DataProxy( cond::PoolStorageManager& pooldb, std::map<std::string,std::string>::iterator& pProxyToToken ): m_pooldb(&pooldb), m_pProxyToToken(pProxyToToken) { 
+    DataProxy( cond::PoolStorageManager* pooldb, std::map<std::string,std::string>::iterator& pProxyToToken ): m_pooldb(pooldb), m_pProxyToToken(pProxyToToken) { 
       //NOTE: We do this so that the type 'DataT' will get registered
       // when the plugin is dynamically loaded
       edm::eventsetup::DataKey::makeTypeTag<DataT>(); 

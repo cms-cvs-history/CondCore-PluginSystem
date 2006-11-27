@@ -16,7 +16,7 @@ Usage:
 //
 // Original Author:  Chris Jones
 //         Created:  Sat Jul 23 19:14:06 EDT 2005
-// $Id: ProxyFactory.h,v 1.2 2005/11/18 17:35:27 chrjones Exp $
+// $Id: ProxyFactory.h,v 1.3 2006/05/18 16:11:19 xiezhen Exp $
 //
 
 // system include files
@@ -36,8 +36,9 @@ namespace edm {
 }
 
 namespace cond{
-  class DBSession;
-  class ProxyFactory : public seal::PluginFactory< edm::eventsetup::DataProxy* ( cond::DBSession*, std::map<std::string,std::string>::iterator& ) >
+  class PoolStorageManager;
+  class ProxyFactory : public seal::PluginFactory< 
+edm::eventsetup::DataProxy* ( cond::PoolStorageManager&, std::map<std::string,std::string>::iterator& ) >
  {
       
  public:

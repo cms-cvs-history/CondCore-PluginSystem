@@ -34,7 +34,7 @@ namespace cond{
   protected:
     virtual const DataT* make(const RecordT&, const edm::eventsetup::DataKey&) {
       try{
-	m_pooldb->connect(cond::ReadOnly);
+	m_pooldb->connect();
 	m_pooldb->startTransaction(true);
 	m_data=cond::Ref<DataT>(*m_pooldb,m_pProxyToToken->second);
 	*m_data;

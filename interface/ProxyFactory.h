@@ -16,7 +16,7 @@ Usage:
 //
 // Original Author:  Chris Jones
 //         Created:  Sat Jul 23 19:14:06 EDT 2005
-// $Id: ProxyFactory.h,v 1.3 2006/05/18 16:11:19 xiezhen Exp $
+// $Id: ProxyFactory.h,v 1.3.2.1 2006/11/27 18:21:38 xiezhen Exp $
 //
 
 // system include files
@@ -37,10 +37,10 @@ namespace edm {
 
 namespace cond{
   class PoolStorageManager;
-  class ProxyFactory : public seal::PluginFactory< 
-edm::eventsetup::DataProxy* ( cond::PoolStorageManager&, std::map<std::string,std::string>::iterator& ) >
- {
-      
+}
+class ProxyFactory : public seal::PluginFactory< 
+  edm::eventsetup::DataProxy* ( cond::PoolStorageManager*, std::map<std::string,std::string>::iterator& ) >
+{
  public:
    ProxyFactory();
    virtual ~ProxyFactory();
@@ -61,6 +61,5 @@ edm::eventsetup::DataProxy* ( cond::PoolStorageManager&, std::map<std::string,st
     // ---------- member data --------------------------------
     
   };
-}
 
 #endif /* CONDCORE_PLUGINSYSTEM_PROXYFACTORY_H */

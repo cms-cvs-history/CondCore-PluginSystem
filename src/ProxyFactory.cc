@@ -8,7 +8,7 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Sat Jul 23 19:14:11 EDT 2005
-// $Id: ProxyFactory.cc,v 1.3 2006/05/18 16:11:20 xiezhen Exp $
+// $Id: ProxyFactory.cc,v 1.3.2.1 2006/11/27 18:21:39 xiezhen Exp $
 //
 
 // system include files
@@ -17,6 +17,7 @@
 #include "CondCore/PluginSystem/interface/ProxyFactory.h"
 #include <map>
 #include <string>
+//#include <iostream>
 //
 // constants, enums and typedefs
 //
@@ -33,13 +34,15 @@
 {
 }
 */
-cond::ProxyFactory::ProxyFactory() 
+ProxyFactory::ProxyFactory() 
   : seal::PluginFactory< edm::eventsetup::DataProxy*( 
-cond::PoolStorageManager& pooldb, std::map<std::string,std::string>::iterator& ) >(pluginCategory())
+cond::PoolStorageManager* pooldb, std::map<std::string,std::string>::iterator& ) >(pluginCategory())
 {
+  //std::cout<<"ProxyFactory::ProxyFactory"<<std::endl;
 }
-cond::ProxyFactory::~ProxyFactory()
+ProxyFactory::~ProxyFactory()
 {
+  //std::cout<<"ProxyFactory::~ProxyFactory"<<std::endl;
 }
 
 //
@@ -66,16 +69,16 @@ cond::ProxyFactory::~ProxyFactory()
 // static member functions
 //
 static
-cond::ProxyFactory s_factory;
+ProxyFactory s_factory;
 
-cond::ProxyFactory* 
-cond::ProxyFactory::get()
+ProxyFactory* 
+ProxyFactory::get()
 {
   return &s_factory;
 }
 
 const char*
-cond::ProxyFactory::pluginCategory()
+ProxyFactory::pluginCategory()
 {
   return  "CondProxyFactory";
 }

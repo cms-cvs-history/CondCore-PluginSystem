@@ -1,0 +1,3 @@
+<bin name=testClassIDCapability file=testClassIDCapability.cpp>
+<use name=CondCore/DBCommon>
+</bin> 

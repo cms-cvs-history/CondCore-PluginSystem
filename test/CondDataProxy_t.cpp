@@ -1,4 +1,8 @@
 // test DataProxy
+
+#include "CondCore/DBCommon/interface/DBSession.h"
+#include "CondCore/DBCommon/interface/Exception.h"
+
 #include "CondCore/DBCommon/interface/ConnectionHandler.h"
 #include "CondCore/DBCommon/interface/Connection.h"
 #include "CondCore/DBCommon/interface/ConnectionConfiguration.h"
@@ -14,6 +18,9 @@
 #include "CondCore/IOVService/interface/IOVService.h"
 #include "CondCore/IOVService/interface/IOVIterator.h"
 #include "CondCore/Utilities/interface/CommonOptions.h"
+
+#include "CondCore/DBCommon/interface/PoolTransaction.h"
+#include "CondCore/DBCommon/interface/CoralTransaction.h"
 
 
 #include "CondCore/IOVService/interface/IOVProxy.h"

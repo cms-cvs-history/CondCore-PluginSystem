@@ -1,4 +1,9 @@
 // test DataProxy
+#include "FWCore/PluginManager/interface/PluginManager.h"
+#include "FWCore/PluginManager/interface/standard.h"
+#include "FWCore/ServiceRegistry/interface/ServiceRegistry.h"
+#include "FWCore/ParameterSet/interface/ParameterSet.h"
+
 
 #include "CondCore/DBCommon/interface/DBSession.h"
 #include "CondCore/DBCommon/interface/Exception.h"
@@ -13,6 +18,7 @@
 #include "CondCore/DBCommon/interface/Exception.h"
 #include "CondCore/DBCommon/interface/FipProtocolParser.h"
 #include "CondCore/MetaDataService/interface/MetaData.h"
+
 
 #include "CondCore/DBCommon/interface/Time.h"
 #include "CondCore/IOVService/interface/IOVService.h"
@@ -31,6 +37,7 @@
 #include "CondCore/PluginSystem/interface/ProxyFactory.h"
 #include "CondCore/IOVService/interface/PayloadProxy.h"
 
+#include "CondCore/Utilities/interface/CommonOptions.h"
 
 
 #include <boost/program_options.hpp>

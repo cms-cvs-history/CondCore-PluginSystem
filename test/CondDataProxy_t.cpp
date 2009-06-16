@@ -4,6 +4,8 @@
 #include "FWCore/ServiceRegistry/interface/ServiceRegistry.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
+#include "CondCore/Utilities/interface/CondPyInterface.h"
+
 
 #include "CondCore/DBCommon/interface/DBSession.h"
 #include "CondCore/DBCommon/interface/Exception.h"
@@ -54,6 +56,23 @@ namespace {
   buildName( const std::string& iRecordName) {
     return iRecordName+"@NewProxy";
   }
+
+
+  class CondGetterFromTag : public cond::CondGetter {
+  public:
+    CondGetterFromTag(PoolDBESSource::ProxyMap const & ip) : m_proxies(ip){}
+    virtual ~CondGetterFromESSource(){}
+
+    cond::IOVProxy get(std::string name) const {
+      PoolDBESSource::ProxyMap::const_iterator p = m_proxies.find(name);
+      if ( p != m_proxies.end())
+	return (*p).second->proxy()->iov();
+      return cond::IOVProxy();
+    }
+
+    PoolDBESSource::ProxyMap const & m_proxies;
+  };
+
 
 }
 
@@ -126,8 +145,8 @@ int main( int argc, char** argv ){
   }
 
 
- std::vector<edm::ParameterSet> psets;
-
+  std::vector<edm::ParameterSet> psets;
+  
   edm::ParameterSet pSet;
   pSet.addParameter("@service_type",std::string("SiteLocalConfigService"));
   psets.push_back(pSet);
@@ -136,47 +155,9 @@ int main( int argc, char** argv ){
   edm::ServiceRegistry::Operate operate(services);
 
 
-  cond::DBSession* session=new cond::DBSession;
-  std::string userenv(std::string("CORAL_AUTH_USER=")+user);
-  std::string passenv(std::string("CORAL_AUTH_PASSWORD=")+pass);
-  ::putenv(const_cast<char*>(userenv.c_str()));
-  ::putenv(const_cast<char*>(passenv.c_str()));
-  if( !authPath.empty() ){
-    session->configuration().setAuthenticationMethod( cond::XML );
-    session->configuration().setAuthenticationPath(authPath);
-  }else{
-    session->configuration().setAuthenticationMethod( cond::Env );    
-  }
-  if(debug){
-    session->configuration().setMessageLevel( cond::Debug );
-  }else{
-    session->configuration().setMessageLevel( cond::Error );
-  }
-  //rely on default
-  //session->configuration().connectionConfiguration()->setConnectionRetrialTimeOut( 600 );
-  //session->configuration().connectionConfiguration()->enableConnectionSharing();
-  //session->configuration().connectionConfiguration()->enableReadOnlySessionOnUpdateConnections();
-  //session->connectionService().configuration().disablePoolAutomaticCleanUp();
-  //session->connectionService().configuration().setConnectionTimeOut(0);
-  
-  if( connect.find("sqlite_fip:") != std::string::npos ){
-    cond::FipProtocolParser p;
-    connect=p.getRealConnect(connect);
-  }
-  // cond::Connection myconnection(connect,-1);  
-  session->open();
-  
-  cond::ConnectionHandler::Instance().registerConnection(connect,*session,-1);
-  cond::Connection & myconnection = *cond::ConnectionHandler::Instance().getConnection(connect);
-
-  myconnection.connect(session);
-  cond::CoralTransaction& coraldb=myconnection.coralTransaction();
-  cond::MetaData metadata_svc(coraldb);
-  std::string iovtoken;
-  coraldb.start(true);
-  iovtoken=metadata_svc.getToken(tag);
-  coraldb.commit();
-  
+  cond::RDBMS rdbms(authPath);
+  cond::CondDB db = rdbms.db(connect);
+  cond::Connection & myconnection = *db.connection();
 
   cond::DataProxyWrapperBase * pb =  
     cond::ProxyFactory::get()->create(buildName(record),  myconnection, 

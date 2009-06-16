@@ -176,7 +176,7 @@ int main( int argc, char** argv ){
     cond::ProxyFactory::get()->create(buildName(record),  myconnection, 
 				      cond::DataProxyWrapperBase::Args(iovtoken, ""));
 
-  DataProxyWrapperBase::ProxyP  payloadProxy = pb->proxy();
+  cond::DataProxyWrapperBase::ProxyP  payloadProxy = pb->proxy();
 
   std::cout << cond::className(typeid(*payloadProxy)) << std::endl;
 

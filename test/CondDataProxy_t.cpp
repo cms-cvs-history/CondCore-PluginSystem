@@ -39,10 +39,14 @@
 
 #include "CondCore/Utilities/interface/CommonOptions.h"
 
+#include "CondCore/DBCommon/interface/ClassID.h"
+
 
 #include <boost/program_options.hpp>
 #include <iterator>
 #include <iostream>
+
+#include <typeinfo>
 
 
 namespace {
@@ -172,7 +176,10 @@ int main( int argc, char** argv ){
     cond::ProxyFactory::get()->create(buildName(record),  myconnection, 
 				      cond::DataProxyWrapperBase::Args(iovtoken, ""));
 
+  DataProxyWrapperBase::ProxyP  payloadProxy = pb->proxy();
+
+  std::cout << cond::className(typeid(*payloadProxy)) << std::endl;
 
 
-    return 0;
+  return 0;
 }

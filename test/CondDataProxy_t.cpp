@@ -65,7 +65,7 @@ int main( int argc, char** argv ){
   myopt.visibles().add_options()
     ("verbose,v","verbose")
     ("tag,t",boost::program_options::value<std::string>(),"tag")
-    ("record,r",boost::program_options::value<std::string>(),"record"),
+    ("record,r",boost::program_options::value<std::string>(),"record")
     ("atTime,a",boost::program_options::value<cond::Time_t>(),"time of event")
     ;
 
@@ -191,7 +191,7 @@ int main( int argc, char** argv ){
   std::cout << "for " << time
 	    <<": since "<< iov.first
 	     <<", till "<< iov.second;
-    if (data.isValid()) {
+    if (payloadProxy->isValid()) {
     } else
       std::cout << ". No data";
     std::cout << std::endl;

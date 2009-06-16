@@ -121,8 +121,8 @@ int main( int argc, char** argv ){
   if(vm.count("record")){
     record=vm["record"].as<std::string>();
   }
-  if(vm.count("time")){
-    time=vm["time"].as<cond::Time_t>();
+  if(vm.count("atTime")){
+    time=vm["atTime"].as<cond::Time_t>();
   }
 
 

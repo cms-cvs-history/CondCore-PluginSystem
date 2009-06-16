@@ -65,7 +65,8 @@ int main( int argc, char** argv ){
   myopt.visibles().add_options()
     ("verbose,v","verbose")
     ("tag,t",boost::program_options::value<std::string>(),"tag")
-    ("record,r",boost::program_options::value<std::string>(),"record")
+    ("record,r",boost::program_options::value<std::string>(),"record"),
+    ("atTime,a",boost::program_options::value<cond::Time_t>(),"time of event")
     ;
 
   myopt.description().add( myopt.visibles() );
@@ -95,6 +96,7 @@ int main( int argc, char** argv ){
 
   std::string tag;
   std::string record;
+  cond::Time_t time=0;
 
   if(!vm.count("connect")){
     std::cerr <<"[Error] no connect[c] option given \n";
@@ -119,6 +121,10 @@ int main( int argc, char** argv ){
   if(vm.count("record")){
     record=vm["record"].as<std::string>();
   }
+  if(vm.count("time")){
+    time=vm["time"].as<cond::Time_t>();
+  }
+
 
  std::vector<edm::ParameterSet> psets;
 
@@ -179,6 +185,16 @@ int main( int argc, char** argv ){
   cond::DataProxyWrapperBase::ProxyP  payloadProxy = pb->proxy();
 
   std::cout << cond::className(typeid(*payloadProxy)) << std::endl;
+
+  cond::ValidityInterval iov = payloadProxy->setIntervalFor(time);
+  payloadProxy->make();
+  std::cout << "for " << time
+	    <<": since "<< iov.first
+	     <<", till "<< iov.second;
+    if (data.isValid()) {
+    } else
+      std::cout << ". No data";
+    std::cout << std::endl;
 
 
   return 0;

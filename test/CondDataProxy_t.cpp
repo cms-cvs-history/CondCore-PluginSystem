@@ -64,11 +64,33 @@ int main( int argc, char** argv ){
     ("record,r",boost::program_options::value<std::string>(),"record")
     ;
 
+  myopt.description().add( myopt.visibles() );
+  boost::program_options::variables_map vm;
+  try{
+    boost::program_options::store(boost::program_options::command_line_parser(argc, argv).options(myopt.description()).run(), vm);
+    boost::program_options::notify(vm);
+  }catch(const boost::program_options::error& er) {
+    std::cerr << er.what()<<std::endl;
+    return 1;
+  }
+  if (vm.count("help")) {
+    std::cout << myopt.visibles() <<std::endl;;
+    return 0;
+  }
 
- bool verbose=vm.count("verbose");
+
+
+
+  bool verbose=vm.count("verbose");
+  
+  std::string connect;
+  std::string authPath("");
+  std::string user("");
+  std::string pass("");
 
   std::string tag;
   std::string record;
+
   if(!vm.count("connect")){
     std::cerr <<"[Error] no connect[c] option given \n";
     std::cerr<<" please do "<<argv[0]<<" --help \n";
@@ -85,6 +107,7 @@ int main( int argc, char** argv ){
   if( vm.count("authPath") ){
       authPath=vm["authPath"].as<std::string>();
   }
+
   if(vm.count("tag")){
     tag=vm["tag"].as<std::string>();
   }

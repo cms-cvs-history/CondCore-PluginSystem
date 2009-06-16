@@ -1,3 +1,9 @@
 <bin name=testClassIDCapability file=testClassIDCapability.cpp>
 <use name=CondCore/DBCommon>
 </bin> 
+
+<bin name=CondDataProxy_t file=CondDataProxy_t.cpp>
+<use name=CondCore/PluginService>
+<use name=CondCore/IOVService>
+</bin> 
+

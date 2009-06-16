@@ -82,6 +82,7 @@ int main( int argc, char** argv ){
 
 
   bool verbose=vm.count("verbose");
+  bool debug=vm.count("debug");
   
   std::string connect;
   std::string authPath("");
@@ -161,9 +162,9 @@ int main( int argc, char** argv ){
   myconnection.connect(session);
   cond::CoralTransaction& coraldb=myconnection.coralTransaction();
   cond::MetaData metadata_svc(coraldb);
-  std::string token;
+  std::string iovtoken;
   coraldb.start(true);
-  token=metadata_svc.getToken(tag);
+  iovtoken=metadata_svc.getToken(tag);
   coraldb.commit();
   
 

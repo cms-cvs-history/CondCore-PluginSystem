@@ -161,7 +161,7 @@ int main( int argc, char** argv ){
   edm::ServiceRegistry::Operate operate(services);
 
 
-  cond::RDBMS rdbms(authPath);
+  cond::RDBMS rdbms(authPath, debug);
   cond::CondDB db = rdbms.getDB(connect);
   cond::Connection & myconnection = *db.connection();
 

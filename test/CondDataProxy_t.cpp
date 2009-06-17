@@ -187,5 +187,18 @@ int main( int argc, char** argv ){
     std::cout << std::endl;
 
 
+    {
+
+    PayloadProxy<cond::KeyList> const * pp = 
+      dynamic_cast< PayloadProxy<cond::KeyList>* >(payloadProxy.get());
+    if (pp) {
+      const cond::KeyList & keys = (*pp)();
+      int n=0;
+      for (int i=0; i<keys.size(); i++)
+	if (keys[i]) n++; 
+      cout << "found " << n << " valid keyed confs" << std::endl;
+
+    }
+
   return 0;
 }

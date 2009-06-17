@@ -167,7 +167,7 @@ int main( int argc, char** argv ){
 
   cond::DataProxyWrapperBase * pb =  
     cond::ProxyFactory::get()->create(buildName(record),  myconnection, 
-				      cond::DataProxyWrapperBase::Args(db.iovtoken(tag), ""));
+				      cond::DataProxyWrapperBase::Args(db.iovToken(tag), ""));
 
   cond::DataProxyWrapperBase::ProxyP  payloadProxy = pb->proxy();
 

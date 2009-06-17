@@ -195,7 +195,7 @@ int main( int argc, char** argv ){
 	const cond::KeyList & keys = (*pp)();
 	int n=0;
 	for (int i=0; i<keys.size(); i++)
-	  if (keys[i]) n++; 
+	  if (keys.elem(i)) n++; 
 	std::cout << "found " << n << " valid keyed confs" << std::endl;
 	
       }

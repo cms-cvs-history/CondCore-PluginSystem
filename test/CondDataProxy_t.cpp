@@ -44,6 +44,7 @@
 #include "CondCore/DBCommon/interface/ClassID.h"
 
 #include "CondCore/IOVService/interface/KeyList.h"
+#include "CondCore/IOVService/interface/KeyListProxy.h"
 
 
 #include <boost/program_options.hpp>
@@ -183,25 +184,25 @@ int main( int argc, char** argv ){
   std::cout << "for " << time
 	    <<": since "<< iov.first
 	     <<", till "<< iov.second;
-    if (payloadProxy->isValid()) {
-    } else
-      std::cout << ". No data";
-    std::cout << std::endl;
+  if (payloadProxy->isValid()) {
+  } else
+    std::cout << ". No data";
+  std::cout << std::endl;
+  
 
-
-    {
-
-      cond::PayloadProxy<cond::KeyList> const * pp = 
-	dynamic_cast< cond::PayloadProxy<cond::KeyList>* >(payloadProxy.get());
-      if (pp) {
-	const cond::KeyList & keys = (*pp)();
-	int n=0;
-	for (int i=0; i<keys.size(); i++)
-	  if (keys.elem(i)) n++; 
-	std::cout << "found " << n << " valid keyed confs" << std::endl;
-	
-      }
+  {
+    
+    cond::PayloadProxy<cond::KeyList> const * pp = 
+      dynamic_cast< cond::PayloadProxy<cond::KeyList>* >(payloadProxy.get());
+    if (pp) {
+      const cond::KeyList & keys = (*pp)();
+      int n=0;
+      for (int i=0; i<keys.size(); i++)
+	if (keys.elem(i)) n++; 
+      std::cout << "found " << n << " valid keyed confs" << std::endl;
+      
     }
+  }
     
 
   }catch(const cond::Exception& er){

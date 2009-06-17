@@ -189,8 +189,8 @@ int main( int argc, char** argv ){
 
     {
 
-    PayloadProxy<cond::KeyList> const * pp = 
-      dynamic_cast< PayloadProxy<cond::KeyList>* >(payloadProxy.get());
+      cond::PayloadProxy<cond::KeyList> const * pp = 
+	dynamic_cast< cond::PayloadProxy<cond::KeyList>* >(payloadProxy.get());
     if (pp) {
       const cond::KeyList & keys = (*pp)();
       int n=0;

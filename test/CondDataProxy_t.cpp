@@ -160,6 +160,8 @@ int main( int argc, char** argv ){
   edm::ServiceToken services(edm::ServiceRegistry::createSet(psets));
   edm::ServiceRegistry::Operate operate(services);
 
+  try{
+
 
   cond::RDBMS rdbms(authPath, debug);
   cond::CondDB db = rdbms.getDB(connect);
@@ -201,5 +203,11 @@ int main( int argc, char** argv ){
       }
     }
     
+
+  }catch(const cond::Exception& er){
+    std::cout<<"error "<<er.what()<<std::endl;
+  }catch(const std::exception& er){
+    std::cout<<"std error "<<er.what()<<std::endl;
+  }
   return 0;
 }

@@ -196,7 +196,7 @@ int main( int argc, char** argv ){
       int n=0;
       for (int i=0; i<keys.size(); i++)
 	if (keys[i]) n++; 
-      cout << "found " << n << " valid keyed confs" << std::endl;
+      std::cout << "found " << n << " valid keyed confs" << std::endl;
 
     }
 

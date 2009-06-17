@@ -63,11 +63,11 @@ namespace {
   class CondGetterFromTag : public cond::CondGetter {
   public:
     CondGetterFromTag( cond::CondDB  db, std::string tag ) : 
-      m_db(idb), m_tag(tag){}
+      m_db(db), m_tag(tag){}
     virtual ~CondGetterFromTag(){}
 
     cond::IOVProxy get(std::string /*name*/) const {
-      return db.iov(m_tag);
+      return m_db.iov(m_tag);
     }
 
     cond::CondDB  m_db;
@@ -167,7 +167,7 @@ int main( int argc, char** argv ){
 
   cond::DataProxyWrapperBase * pb =  
     cond::ProxyFactory::get()->create(buildName(record),  myconnection, 
-				      cond::DataProxyWrapperBase::Args(iovtoken, ""));
+				      cond::DataProxyWrapperBase::Args(db.iovtoken(tag), ""));
 
   cond::DataProxyWrapperBase::ProxyP  payloadProxy = pb->proxy();
 

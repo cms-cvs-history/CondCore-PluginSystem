@@ -43,6 +43,8 @@
 
 #include "CondCore/DBCommon/interface/ClassID.h"
 
+#include "CondCore/IOVService/interface/KeyList.h"
+
 
 #include <boost/program_options.hpp>
 #include <iterator>
@@ -60,17 +62,16 @@ namespace {
 
   class CondGetterFromTag : public cond::CondGetter {
   public:
-    CondGetterFromTag(PoolDBESSource::ProxyMap const & ip) : m_proxies(ip){}
-    virtual ~CondGetterFromESSource(){}
+    CondGetterFromTag( cond::CondDB  db, std::string tag ) : 
+      m_db(idb), m_tag(tag){}
+    virtual ~CondGetterFromTag(){}
 
-    cond::IOVProxy get(std::string name) const {
-      PoolDBESSource::ProxyMap::const_iterator p = m_proxies.find(name);
-      if ( p != m_proxies.end())
-	return (*p).second->proxy()->iov();
-      return cond::IOVProxy();
+    cond::IOVProxy get(std::string /*name*/) const {
+      return db.iov(m_tag);
     }
 
-    PoolDBESSource::ProxyMap const & m_proxies;
+    cond::CondDB  m_db;
+    std::string m_tag;
   };
 
 
@@ -84,6 +85,7 @@ int main( int argc, char** argv ){
   myopt.visibles().add_options()
     ("verbose,v","verbose")
     ("tag,t",boost::program_options::value<std::string>(),"tag")
+    ("keyed,k",boost::program_options::value<std::string>(),"tag of keyed container")
     ("record,r",boost::program_options::value<std::string>(),"record")
     ("atTime,a",boost::program_options::value<cond::Time_t>(),"time of event")
     ;
@@ -114,6 +116,7 @@ int main( int argc, char** argv ){
   std::string pass("");
 
   std::string tag;
+  std::string keyed;
   std::string record;
   cond::Time_t time=0;
 
@@ -134,6 +137,9 @@ int main( int argc, char** argv ){
       authPath=vm["authPath"].as<std::string>();
   }
 
+  if(vm.count("keyed")){
+    keyed=vm["keyed"].as<std::string>();
+  }
   if(vm.count("tag")){
     tag=vm["tag"].as<std::string>();
   }
@@ -156,7 +162,7 @@ int main( int argc, char** argv ){
 
 
   cond::RDBMS rdbms(authPath);
-  cond::CondDB db = rdbms.db(connect);
+  cond::CondDB db = rdbms.getDB(connect);
   cond::Connection & myconnection = *db.connection();
 
   cond::DataProxyWrapperBase * pb =  
@@ -166,6 +172,9 @@ int main( int argc, char** argv ){
   cond::DataProxyWrapperBase::ProxyP  payloadProxy = pb->proxy();
 
   std::cout << cond::className(typeid(*payloadProxy)) << std::endl;
+
+  CondGetterFromTag getter(db,keyed);
+  payloadProxy->loadMore(getter);
 
   cond::ValidityInterval iov = payloadProxy->setIntervalFor(time);
   payloadProxy->make();

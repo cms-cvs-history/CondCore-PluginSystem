@@ -54,11 +54,14 @@
 #include <typeinfo>
 
 
+// emulate ESSource
+
 namespace {
   std::string
   buildName( const std::string& iRecordName) {
     return iRecordName+"@NewProxy";
   }
+
 
 
   class CondGetterFromTag : public cond::CondGetter {
@@ -74,6 +77,9 @@ namespace {
     cond::CondDB  m_db;
     std::string m_tag;
   };
+
+  // make compiler happy
+  namespace { const char * sourceRecordName_ = 0;} 
 
 
 }
@@ -168,6 +174,8 @@ int main( int argc, char** argv ){
   cond::CondDB db = rdbms.getDB(connect);
   cond::Connection & myconnection = *db.connection();
 
+
+  // here the proxy is constructed: 
   cond::DataProxyWrapperBase * pb =  
     cond::ProxyFactory::get()->create(buildName(record),  myconnection, 
 				      cond::DataProxyWrapperBase::Args(db.iovToken(tag), ""));

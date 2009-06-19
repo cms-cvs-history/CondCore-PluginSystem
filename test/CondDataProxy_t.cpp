@@ -70,7 +70,9 @@ namespace {
       m_db(db), m_tag(tag){}
     virtual ~CondGetterFromTag(){}
 
-    cond::IOVProxy get(std::string /*name*/) const {
+    cond::IOVProxy get(std::string name) const {
+      // we do not use the name: still verify that is correct...
+      std::cout << "keyed record name " << name << std::endl;
       return m_db.iov(m_tag);
     }
 

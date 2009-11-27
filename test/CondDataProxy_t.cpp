@@ -17,8 +17,6 @@
 
 
 #include "CondCore/DBCommon/interface/Time.h"
-#include "CondCore/IOVService/interface/IOVService.h"
-#include "CondCore/IOVService/interface/IOVIterator.h"
 #include "CondCore/Utilities/interface/CommonOptions.h"
 
 
@@ -72,7 +70,7 @@ namespace {
   };
 
   // make compiler happy
-  namespace { const char * sourceRecordName_ = 0;} 
+  // namespace { const char * sourceRecordName_ = 0;} 
 
 
 }
@@ -105,9 +103,7 @@ int main( int argc, char** argv ){
   }
 
 
-
-
-  bool verbose=vm.count("verbose");
+  //  bool verbose=vm.count("verbose");
   bool debug=vm.count("debug");
   
   std::string connect;
